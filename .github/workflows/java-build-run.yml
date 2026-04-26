@@ -1,7 +1,12 @@
 name: Java Compile and Run
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      java_file:
+        description: 'Compile対象のJavaファイル名（拡張子なし）'
+        required: false
+        default: 'HelloWorld'
 
 jobs:
   build-and-run:
@@ -20,12 +25,12 @@ jobs:
       - name: Compile Java class
         run: |
           mkdir -p build
-          javac -d build src/HelloWorld.java
+          javac -d build src/${{ inputs.java_file }}.java
       
       - name: Create JAR
         run: |
           cd build
-          jar cfe HelloWorld.jar HelloWorld *.class
+          jar cfe ${{ inputs.java_file }}.jar ${{ inputs.java_file }} *.class
       
       - name: Run JAR
-        run: java -jar build/HelloWorld.jar
+        run: java -jar build/${{ inputs.java_file }}.jar
