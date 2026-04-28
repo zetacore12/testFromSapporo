@@ -18,7 +18,8 @@ jobs:
       - name: Download artifact
         uses: dawidd6/action-download-artifact@v3
         with:
-          workflow: Java Build
+          workflow: build.yml
+          branch: main
           name: app-jar
 
       - name: Run
