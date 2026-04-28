@@ -28,3 +28,6 @@ jobs:
         with:
           name: app-jar
           path: build/libs/app.jar
+
+      - name: Check build output
+        run: ls -R build
