@@ -2,6 +2,12 @@ plugins {
     id 'java'
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'HelloWorld'
+    }
+}
+
 java {
     sourceCompatibility = '21'
     targetCompatibility = '21'
