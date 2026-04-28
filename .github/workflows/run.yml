@@ -1,0 +1,21 @@
+name: Java Run
+
+on:
+  workflow_run:
+    workflows: ["Java Build"]
+    types:
+      - completed
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: Java Build
+          name: app-jar
+
+      - name: Run
+        run: java -jar app.jar

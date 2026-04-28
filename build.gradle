@@ -2,9 +2,19 @@ plugins {
     id 'java'
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'Runner'
+    }
+}
+
 java {
     sourceCompatibility = '21'
     targetCompatibility = '21'
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {

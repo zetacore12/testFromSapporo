@@ -1,36 +1,37 @@
-name: Java Compile and Run
+name: Java Build with Gradle
 
 on:
   workflow_dispatch:
     inputs:
-      java_file:
-        description: 'Compile対象のJavaファイル名（拡張子なし）'
-        required: false
-        default: 'HelloWorld'
+      class_name:
+        description: '実行するクラス名（完全修飾名）'
+        required: true
+      method_name:
+        description: '実行するメソッド名'
+        required: true
 
 jobs:
-  build-and-run:
+  build:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      
-      - name: Compile Java class
-        run: |
-          mkdir -p build
-          javac -d build src/${{ inputs.java_file }}.java
-      
-      - name: Create JAR
-        run: |
-          cd build
-          jar cfe ${{ inputs.java_file }}.jar ${{ inputs.java_file }} *.class
-      
-      - name: Run JAR
-        run: java -jar build/${{ inputs.java_file }}.jar
+       - name: Checkout code
+         uses: actions/checkout@v4
+
+       - name: Set up Java
+         uses: actions/setup-java@v4
+         with:
+            java-version: '21'
+            distribution: 'temurin'
+
+       - name: Grant execute permission for gradlew
+         run: chmod +x gradlew
+
+       - name: Build with Gradle
+         run: ./gradlew build
+
+       - name: Run jar
+         run: |
+           java -jar build/libs/*.jar \
+             "${{ github.event.inputs.class_name }}" \
+             "${{ github.event.inputs.method_name }}"
