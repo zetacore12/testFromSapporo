@@ -2,6 +2,13 @@ name: Java Build with Gradle
 
 on:
   workflow_dispatch:
+    inputs:
+      class_name:
+        description: '実行するクラス名（完全修飾名）'
+        required: true
+      method_name:
+        description: '実行するメソッド名'
+        required: true
 
 jobs:
   build:
@@ -24,4 +31,7 @@ jobs:
          run: ./gradlew build
 
        - name: Run jar
-         run: java -jar build/libs/*.jar
+         run: |
+           java -jar build/libs/*.jar \
+             "${{ github.event.inputs.class_name }}" \
+             "${{ github.event.inputs.method_name }}"
