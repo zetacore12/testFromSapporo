@@ -1,21 +1,32 @@
 name: Java Run
 
 on:
-  workflow_run:
-    workflows: ["Java Build"]
-    types:
-      - completed
+  workflow_dispatch:
+    inputs:
+      arg1:
+        description: "クラス名"
+        required: true
+      arg2:
+        description: "メソッド名"
+        required: true
 
 jobs:
   run:
     runs-on: ubuntu-latest
-
     steps:
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+        
       - name: Download artifact
         uses: dawidd6/action-download-artifact@v3
         with:
-          workflow: Java Build
+          workflow: build.yml
+          branch: main
           name: app-jar
 
       - name: Run
-        run: java -jar app.jar
+        run: |
+          java -jar testFromSapporo.jar "${{ github.event.inputs.arg1 }}" "${{ github.event.inputs.arg2 }}"
