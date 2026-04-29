@@ -17,7 +17,7 @@ public class CrawlingGreen {
     private static final String TARGET_URL = "https://www.green-japan.com/salary/400";
     private static final String CSV_PATH = "jobs.csv";
 
-    public static void main(String[] args) {
+    public static void exec() {
         try {
             List<Job> jobs = fetchJobs();
 
