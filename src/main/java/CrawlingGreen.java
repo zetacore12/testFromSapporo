@@ -200,7 +200,7 @@ public class CrawlingGreen {
         System.err.println("[ERROR] " + msg);
         e.printStackTrace();
     }
-}
+
 // =========================
 // モデル
 // =========================
@@ -218,4 +218,5 @@ static class Job {
         this.salary = salary;
         this.link = link;
     }
+  }
 }
