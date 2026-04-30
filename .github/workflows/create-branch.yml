@@ -22,10 +22,10 @@ jobs:
           BRANCH_NAME=$(echo $BRANCH_NAME | tr ' ' '-' | tr -dc 'a-zA-Z0-9-')
           
           # ブランチを作成してpush
-          git checkout -b release/$BRANCH_NAME develop
+          git checkout -b release/$BRANCH_NAME origin/develop
           git push origin release/$BRANCH_NAME
 
-          git checkout -b feature/$BRANCH_NAME release/$BRANCH_NAME
+          git checkout -b feature/$BRANCH_NAME origin/release/$BRANCH_NAME
           git push origin feature/$BRANCH_NAME
           
           # Issueにブランチ作成をコメント（オプション）
