@@ -6,9 +6,14 @@ on:
       arg1:
         description: "クラス名"
         required: true
+        type: choice
+        options:
+          - HelloWorld
+          - CrawlingGreen
       arg2:
         description: "メソッド名"
         required: true
+        default: "exec"
 
 jobs:
   run:

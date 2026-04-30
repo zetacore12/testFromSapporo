@@ -3,8 +3,12 @@ plugins {
 }
 
 jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes 'Main-Class': 'Runner'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
 
@@ -20,6 +24,7 @@ repositories {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
     implementation 'org.slf4j:slf4j-api:2.0.0'
+    implementation 'org.jsoup:jsoup:1.17.2'
     implementation 'ch.qos.logback:logback-classic:1.2.6'
 }
 
