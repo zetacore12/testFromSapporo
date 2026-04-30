@@ -1,0 +1,45 @@
+name: Auto PR (feature → release/*)
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract branch suffix
+        id: vars
+        run: |
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          SUFFIX="${BRANCH_NAME#feature/}"
+          echo "suffix=$SUFFIX" >> $GITHUB_OUTPUT
+          echo "release_branch=release/$SUFFIX" >> $GITHUB_OUTPUT
+
+      - name: Create release branch if not exists
+        run: |
+          git fetch origin
+          if ! git ls-remote --exit-code --heads origin release/${{ steps.vars.outputs.suffix }}; then
+            git checkout -b release/${{ steps.vars.outputs.suffix }}
+            git push origin release/${{ steps.vars.outputs.suffix }}
+          fi
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: release/${{ steps.vars.outputs.suffix }}
+          branch: ${{ github.ref_name }}
+          title: "Auto PR: ${{ github.ref_name }} → release/${{ steps.vars.outputs.suffix }}"
+          body: |
+            自動生成されたPRです。
+            - source: ${{ github.ref_name }}
+            - target: release/${{ steps.vars.outputs.suffix }}
