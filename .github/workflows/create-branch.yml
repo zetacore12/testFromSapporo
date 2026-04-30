@@ -1,0 +1,33 @@
+name: Create Branch on Issue
+
+on:
+  issues:
+    types: [opened] # Issueが作成されたときに実行
+
+jobs:
+  create-branch:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Branch
+        run: |
+          # IssueのIDとタイトルをブランチ名に使用
+          BRANCH_NAME="issue-${{ github.event.issue.number }}-${{ github.event.issue.title }}"
+          # 特殊文字やスペースをハイフンに置換（オプション）
+          BRANCH_NAME=$(echo $BRANCH_NAME | tr ' ' '-' | tr -dc 'a-zA-Z0-9-')
+          
+          # ブランチを作成してpush
+          git checkout -b release/$BRANCH_NAME develop
+          git push origin release/$BRANCH_NAME
+
+          git checkout -b feature/$BRANCH_NAME release/$BRANCH_NAME
+          git push origin feature/$BRANCH_NAME
+          
+          # Issueにブランチ作成をコメント（オプション）
+          echo "Branch created: release/$BRANCH_NAME"
+          echo "Branch created: feature/$BRANCH_NAME"
