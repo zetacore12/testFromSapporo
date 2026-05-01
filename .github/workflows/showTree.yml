@@ -1,0 +1,17 @@
+name: Show Project Tree
+
+on:
+  workflow_dispatch:
+
+jobs:
+  tree:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tree
+        run: sudo apt-get update && sudo apt-get install -y tree
+
+      - name: Show tree
+        run: tree -a -I '.git|node_modules'
