@@ -5,7 +5,7 @@ import org.jsoup.nodes.Node;
 
 public class HtmlTreePrinter {
 
-    public static void main(String[] args) throws Exception {
+    public static void exec() throws Exception {
         String url = "https://example.com";
 
         Document doc = Jsoup.connect(url).get();
