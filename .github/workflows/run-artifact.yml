@@ -10,6 +10,7 @@ on:
         options:
           - HelloWorld
           - CrawlingGreen
+          - HtmlTreePrinter
       arg2:
         description: "メソッド名"
         required: true
