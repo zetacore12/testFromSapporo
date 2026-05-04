@@ -5,19 +5,30 @@ import org.jsoup.nodes.Node;
 
 public class HtmlTreePrinter {
 
-    public static void exec() throws Exception {
+    public static void main(String[] args) throws Exception {
         String url = "https://example.com";
 
         Document doc = Jsoup.connect(url).get();
-
         printNode(doc, 0);
     }
 
     static void printNode(Node node, int depth) {
-        // インデント
-        System.out.println("  ".repeat(depth) + node.nodeName());
+        String indent = "  ".repeat(depth);
 
-        // 子ノードを再帰処理
+        if (node instanceof Element) {
+            Element el = (Element) node;
+
+            String id = el.id();
+            if (!id.isEmpty()) {
+                System.out.println(indent + el.tagName() + " #" + id);
+            } else {
+                System.out.println(indent + el.tagName());
+            }
+        } else {
+            // textや#documentなど
+            System.out.println(indent + node.nodeName());
+        }
+
         for (Node child : node.childNodes()) {
             printNode(child, depth + 1);
         }
